@@ -3,16 +3,15 @@ require('dotenv').config()
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const cors = require('cors')
 const app = express()
-const port = 3000
-const db_username = process.env.DB_USERNAME
-const db_password = process.env.USER_PASSWORD
+const port = process.env.PORT || 3000;
+
 
 //middleware 
 app.use(cors())
 app.use(express.json())
 
 //server to mondodb database
-const uri = `mongodb+srv://${db_username}:${db_password}@cluster0.elpbg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.USER_PASSWORD}@cluster0.elpbg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -36,7 +35,7 @@ async function run() {
     const CategoryColl = ArtCategoryDB.collection("CategoryColl");
     
     // server side routing
-    app.get('/', async(req, res) => res.send('Hello World!'))
+    app.get('/', async(req, res) => res.send('Hello Welcome to Dreamscape-server'))
 
     app.get('/craft', async(req, res) => {
         const cursor = caftColl.find({});
@@ -108,10 +107,10 @@ async function run() {
         res.send(result)
     })
 
+    app.listen(port, () => console.log(`Your Dreamescape server is running on http://localhost:${port}`))
+
   } finally {
     // await client.close();
   }
 }
 run().catch(console.dir);
-
-app.listen(port, () => console.log(`Your Dreamescape server is running on http://localhost:${port}`))
